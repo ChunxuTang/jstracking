@@ -27,6 +27,7 @@
     "babel-preset-env": "^1.5.2",
     "dat.gui": "^0.6.1",
     "jshint": "^2.9.5",
+    "precommit-hook": "^3.0.0",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0"
   }
