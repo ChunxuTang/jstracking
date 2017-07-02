@@ -1,0 +1,33 @@
+{
+  "name": "jstracking",
+  "version": "0.0.1",
+  "description": "An NPM compatible modern approach for Computer Vision on the web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "jshint",
+    "validate": "npm ls"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshuaTang/jstracking.git"
+  },
+  "author": "Joshua Tang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JoshuaTang/jstracking/issues"
+  },
+  "homepage": "https://github.com/JoshuaTang/jstracking#readme",
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.5.2",
+    "dat.gui": "^0.6.1",
+    "jshint": "^2.9.5",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0"
+  }
+}
