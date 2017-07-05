@@ -409,10 +409,11 @@ tracking.track = function (element, tracker, opt_options) {
  * @private
  */
 tracking.trackCanvas_ = function (element, tracker) {
-  var self = this;
+  var _this = this;
+
   var task = new tracking.TrackerTask(tracker);
   task.on('run', function () {
-    self.trackCanvasInternal_(element, tracker);
+    _this.trackCanvasInternal_(element, tracker);
   });
   return task.run();
 };
@@ -476,8 +477,8 @@ tracking.trackImg_ = function (element, tracker) {
 tracking.trackVideo_ = function (element, tracker) {
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
-  var width;
-  var height;
+  var width = void 0;
+  var height = void 0;
 
   var resizeCanvas_ = function resizeCanvas_() {
     width = element.offsetWidth;
@@ -488,7 +489,7 @@ tracking.trackVideo_ = function (element, tracker) {
   resizeCanvas_();
   element.addEventListener('resize', resizeCanvas_);
 
-  var requestId;
+  var requestId = void 0;
   var requestAnimationFrame_ = function requestAnimationFrame_() {
     requestId = window.requestAnimationFrame(function () {
       if (element.readyState === element.HAVE_ENOUGH_DATA) {

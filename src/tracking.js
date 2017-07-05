@@ -68,7 +68,7 @@ tracking.inherits = function(childCtor, parentCtor) {
    * @return {*} The return value of the superclass method/constructor.
    */
   childCtor.base = function(me, methodName) {
-    var args = Array.prototype.slice.call(arguments, 2);
+    const args = Array.prototype.slice.call(arguments, 2);
     return parentCtor.prototype[methodName].apply(me, args);
   };
 };
@@ -189,10 +189,9 @@ tracking.track = function(element, tracker, opt_options) {
  * @private
  */
 tracking.trackCanvas_ = function(element, tracker) {
-  var self = this;
-  var task = new tracking.TrackerTask(tracker);
-  task.on('run', function() {
-    self.trackCanvasInternal_(element, tracker);
+  const task = new tracking.TrackerTask(tracker);
+  task.on('run', () => {
+    this.trackCanvasInternal_(element, tracker);
   });
   return task.run();
 };
@@ -208,10 +207,10 @@ tracking.trackCanvas_ = function(element, tracker) {
  * @private
  */
 tracking.trackCanvasInternal_ = function(element, tracker) {
-  var width = element.width;
-  var height = element.height;
-  var context = element.getContext('2d');
-  var imageData = context.getImageData(0, 0, width, height);
+  const width = element.width;
+  const height = element.height;
+  const context = element.getContext('2d');
+  const imageData = context.getImageData(0, 0, width, height);
   tracker.track(imageData.data, width, height);
 };
 
@@ -226,14 +225,14 @@ tracking.trackCanvasInternal_ = function(element, tracker) {
  * @private
  */
 tracking.trackImg_ = function(element, tracker) {
-  var width = element.width;
-  var height = element.height;
-  var canvas = document.createElement('canvas');
+  const width = element.width;
+  const height = element.height;
+  const canvas = document.createElement('canvas');
 
   canvas.width = width;
   canvas.height = height;
 
-  var task = new tracking.TrackerTask(tracker);
+  const task = new tracking.TrackerTask(tracker);
   task.on('run', function() {
     Canvas.loadImage(canvas, element.src, 0, 0, width, height, function() {
       tracking.trackCanvasInternal_(canvas, tracker);
@@ -254,12 +253,12 @@ tracking.trackImg_ = function(element, tracker) {
  * @private
  */
 tracking.trackVideo_ = function(element, tracker) {
-  var canvas = document.createElement('canvas');
-  var context = canvas.getContext('2d');
-  var width;
-  var height;
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  let width;
+  let height;
 
-  var resizeCanvas_ = function() {
+  const resizeCanvas_ = function() {
     width = element.offsetWidth;
     height = element.offsetHeight;
     canvas.width = width;
@@ -268,8 +267,8 @@ tracking.trackVideo_ = function(element, tracker) {
   resizeCanvas_();
   element.addEventListener('resize', resizeCanvas_);
 
-  var requestId;
-  var requestAnimationFrame_ = function() {
+  let requestId;
+  const requestAnimationFrame_ = function() {
     requestId = window.requestAnimationFrame(function() {
       if (element.readyState === element.HAVE_ENOUGH_DATA) {
         try {
@@ -284,7 +283,7 @@ tracking.trackVideo_ = function(element, tracker) {
     });
   };
 
-  var task = new tracking.TrackerTask(tracker);
+  const task = new tracking.TrackerTask(tracker);
   task.on('stop', function() {
     window.cancelAnimationFrame(requestId);
   });
