@@ -474,11 +474,13 @@ tracking.trackImg_ = function (element, tracker) {
  * @param {object} opt_options Optional configuration to the tracker.
  * @private
  */
-tracking.trackVideo_ = function (element, tracker) {
+tracking.trackVideo_ = function (element, tracker, opt_options) {
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
   var width = void 0;
   var height = void 0;
+  var fps = opt_options.fps || 60;
+  var interval = 1000 / fps;
 
   var resizeCanvas_ = function resizeCanvas_() {
     width = element.offsetWidth;
@@ -490,16 +492,26 @@ tracking.trackVideo_ = function (element, tracker) {
   element.addEventListener('resize', resizeCanvas_);
 
   var requestId = void 0;
+  var now = void 0,
+      then = void 0;
+  var trackAnimationFrame_ = function trackAnimationFrame_() {
+    if (element.readyState === element.HAVE_ENOUGH_DATA) {
+      try {
+        // Firefox v~30.0 gets confused with the video readyState firing an
+        // erroneous HAVE_ENOUGH_DATA just before HAVE_CURRENT_DATA state,
+        // hence keep trying to read it until resolved.
+        context.drawImage(element, 0, 0, width, height);
+      } catch (err) {}
+      tracking.trackCanvasInternal_(canvas, tracker);
+    }
+  };
   var requestAnimationFrame_ = function requestAnimationFrame_() {
     requestId = window.requestAnimationFrame(function () {
-      if (element.readyState === element.HAVE_ENOUGH_DATA) {
-        try {
-          // Firefox v~30.0 gets confused with the video readyState firing an
-          // erroneous HAVE_ENOUGH_DATA just before HAVE_CURRENT_DATA state,
-          // hence keep trying to read it until resolved.
-          context.drawImage(element, 0, 0, width, height);
-        } catch (err) {}
-        tracking.trackCanvasInternal_(canvas, tracker);
+      now = Date.now();
+      var elapsed = now - then;
+      if (elapsed > interval) {
+        then = now - elapsed % interval;
+        trackAnimationFrame_();
       }
       requestAnimationFrame_();
     });
@@ -510,6 +522,7 @@ tracking.trackVideo_ = function (element, tracker) {
     window.cancelAnimationFrame(requestId);
   });
   task.on('run', function () {
+    then = Date.now();
     requestAnimationFrame_();
   });
   return task.run();

@@ -252,11 +252,13 @@ tracking.trackImg_ = function(element, tracker) {
  * @param {object} opt_options Optional configuration to the tracker.
  * @private
  */
-tracking.trackVideo_ = function(element, tracker) {
+tracking.trackVideo_ = function(element, tracker, opt_options) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   let width;
   let height;
+  const fps = opt_options.fps || 60;
+  const interval = 1000 / fps;
 
   const resizeCanvas_ = function() {
     width = element.offsetWidth;
@@ -268,16 +270,25 @@ tracking.trackVideo_ = function(element, tracker) {
   element.addEventListener('resize', resizeCanvas_);
 
   let requestId;
+  let now, then;
+  const trackAnimationFrame_ = function() {
+    if (element.readyState === element.HAVE_ENOUGH_DATA) {
+      try {
+        // Firefox v~30.0 gets confused with the video readyState firing an
+        // erroneous HAVE_ENOUGH_DATA just before HAVE_CURRENT_DATA state,
+        // hence keep trying to read it until resolved.
+        context.drawImage(element, 0, 0, width, height);
+      } catch (err) {}
+      tracking.trackCanvasInternal_(canvas, tracker);
+    }
+  };
   const requestAnimationFrame_ = function() {
     requestId = window.requestAnimationFrame(function() {
-      if (element.readyState === element.HAVE_ENOUGH_DATA) {
-        try {
-          // Firefox v~30.0 gets confused with the video readyState firing an
-          // erroneous HAVE_ENOUGH_DATA just before HAVE_CURRENT_DATA state,
-          // hence keep trying to read it until resolved.
-          context.drawImage(element, 0, 0, width, height);
-        } catch (err) {}
-        tracking.trackCanvasInternal_(canvas, tracker);
+      now = Date.now();
+      const elapsed = now - then;
+      if (elapsed > interval) {
+        then = now - (elapsed % interval);
+        trackAnimationFrame_();
       }
       requestAnimationFrame_();
     });
@@ -288,6 +299,7 @@ tracking.trackVideo_ = function(element, tracker) {
     window.cancelAnimationFrame(requestId);
   });
   task.on('run', function() {
+    then = Date.now();
     requestAnimationFrame_();
   });
   return task.run();
