@@ -2,7 +2,7 @@ const { Brief, Fast } = require('./features');
 const { TrackingMath, Matrix } = require('./math');
 const { ColorTracker, ObjectTracker, Tracker, TrackerTask } = require('./trackers');
 const { haar, ViolaJones } = require('./training');
-const { Canvas, DisjointSet, EventEmitter, Image } = require('./utils');
+const { Canvas, DisjointSet, EventEmitter, Image, Scale } = require('./utils');
 
 if (typeof window === 'undefined') { window = {}; }
 if (typeof navigator === 'undefined') { navigator = {}; }
@@ -21,6 +21,7 @@ let tracking = Object.assign(window.tracking, {
   Math: TrackingMath,
   Matrix,
   ObjectTracker,
+  Scale,
   Tracker,
   TrackerTask,
   ViolaJones
@@ -261,10 +262,14 @@ tracking.trackVideo_ = function(element, tracker, opt_options) {
   const interval = 1000 / fps;
 
   const resizeCanvas_ = function() {
-    width = element.offsetWidth;
-    height = element.offsetHeight;
-    canvas.width = width;
-    canvas.height = height;
+    console.warn('resizeCanvas_');
+    if (opt_options.scaled) {
+      tracking.Scale.adjustScale(element.offsetWidth, element.offsetHeight);
+    }
+    canvas.width = width = element.offsetWidth;
+    canvas.height = height = element.offsetHeight;
+    // canvas.width = width;
+    // canvas.height = height;
   };
   resizeCanvas_();
   element.addEventListener('resize', resizeCanvas_);
