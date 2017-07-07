@@ -57,6 +57,7 @@ ViolaJones.classifiers = {
  * @static
  */
 ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, stepSize, edgesDensity, data) {
+  let now = +new Date();
   let total = 0;
   let rects = [];
   let integralImage = new Int32Array(width * height);
@@ -104,6 +105,8 @@ ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, 
     blockWidth = (scale * minWidth) | 0;
     blockHeight = (scale * minHeight) | 0;
   }
+  let then = +new Date();
+  console.warn('detect time', then - now);
   return this.mergeRectangles_(rects);
 };
 
@@ -284,22 +287,14 @@ ViolaJones.mergeRectangles_ = function (rects) {
 
   let result = [];
   const scale = Scale.scale;
-  console.warn('scale in ViolaJones', scale);
   Object.keys(map).forEach(function (key) {
     let rect = map[key];
-    // result.push({
-    //   total: rect.total,
-    //   width: ((rect.width / rect.total + 0.5) / scale) | 0,
-    //   height: ((rect.height / rect.total + 0.5) / scale) | 0,
-    //   x: ((rect.x / rect.total + 0.5) / scale) | 0,
-    //   y: ((rect.y / rect.total + 0.5) / scale) | 0
-    // });
     result.push({
       total: rect.total,
-      width: ((rect.width / rect.total + 0.5) ) | 0,
-      height: ((rect.height / rect.total + 0.5) ) | 0,
-      x: ((rect.x / rect.total + 0.5) ) | 0,
-      y: ((rect.y / rect.total + 0.5) ) | 0
+      width: ((rect.width / rect.total + 0.5) / scale) | 0,
+      height: ((rect.height / rect.total + 0.5) / scale) | 0,
+      x: ((rect.x / rect.total + 0.5) / scale) | 0,
+      y: ((rect.y / rect.total + 0.5) / scale) | 0
     });
   });
 

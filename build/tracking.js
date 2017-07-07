@@ -79,12 +79,14 @@ var Canvas = __webpack_require__(13);
 var DisjointSet = __webpack_require__(14);
 var EventEmitter = __webpack_require__(15);
 var Image = __webpack_require__(16);
+var Scale = __webpack_require__(17);
 
 var utils = {
   Canvas: Canvas,
   DisjointSet: DisjointSet,
   EventEmitter: EventEmitter,
-  Image: Image
+  Image: Image,
+  Scale: Scale
 };
 
 module.exports = utils;
@@ -158,7 +160,7 @@ module.exports = Tracker;
 
 // export { default as ViolaJones } from './ViolaJones';
 
-var ViolaJones = __webpack_require__(18);
+var ViolaJones = __webpack_require__(19);
 var haar = __webpack_require__(4);
 
 var training = {
@@ -179,9 +181,9 @@ module.exports = training;
 // export { default as face } from './face';
 // export { default as mouth } from './mouth';
 
-var eye = __webpack_require__(19);
-var face = __webpack_require__(20);
-var mouth = __webpack_require__(21);
+var eye = __webpack_require__(20);
+var face = __webpack_require__(21);
+var mouth = __webpack_require__(22);
 
 var haar = {
   eye: eye,
@@ -220,7 +222,8 @@ var _require5 = __webpack_require__(0),
     Canvas = _require5.Canvas,
     DisjointSet = _require5.DisjointSet,
     EventEmitter = _require5.EventEmitter,
-    Image = _require5.Image;
+    Image = _require5.Image,
+    Scale = _require5.Scale;
 
 if (typeof window === 'undefined') {
   window = {};
@@ -243,6 +246,7 @@ var tracking = Object.assign(window.tracking, {
   Math: TrackingMath,
   Matrix: Matrix,
   ObjectTracker: ObjectTracker,
+  Scale: Scale,
   Tracker: Tracker,
   TrackerTask: TrackerTask,
   ViolaJones: ViolaJones
@@ -483,10 +487,12 @@ tracking.trackVideo_ = function (element, tracker, opt_options) {
   var interval = 1000 / fps;
 
   var resizeCanvas_ = function resizeCanvas_() {
-    width = element.offsetWidth;
-    height = element.offsetHeight;
-    canvas.width = width;
-    canvas.height = height;
+    console.warn('resizeCanvas_');
+    if (opt_options.scaled) {
+      tracking.Scale.adjustScale(element.offsetWidth, element.offsetHeight);
+    }
+    canvas.width = width = element.offsetWidth * tracking.Scale.scale;
+    canvas.height = height = element.offsetHeight * tracking.Scale.scale;
   };
   resizeCanvas_();
   element.addEventListener('resize', resizeCanvas_);
@@ -1176,9 +1182,9 @@ module.exports = Fast;
 // export { default as TrackerTask } from './TrackerTask';
 
 var ColorTracker = __webpack_require__(12);
-var ObjectTracker = __webpack_require__(17);
+var ObjectTracker = __webpack_require__(18);
 var Tracker = __webpack_require__(2);
-var TrackerTask = __webpack_require__(22);
+var TrackerTask = __webpack_require__(23);
 
 var trackers = {
   ColorTracker: ColorTracker,
@@ -2271,6 +2277,93 @@ module.exports = Image;
 "use strict";
 
 
+/**
+ * Scale utility to achieve auto scaling of canvas to improve performance.
+ * @static
+ * @constructor
+ */
+var Scale = {};
+
+/**
+ * Holds the scale of original size.
+ * @type {number}
+ * @default 1.0
+ * @static
+ */
+Scale.scale = 1.0;
+
+/**
+ * Adjusts the scale of original size.
+ * @param {number} width Original canvas's width.
+ * @param {number} height Original canvas's height.
+ * @static
+ */
+Scale.adjustScale = function (width, height) {
+  var PIXEL_THRESHOLD = 50000;
+  // this.scale =
+  //   this.normalizeScale(1.0 / (Math.sqrt(width * height / PIXEL_THRESHOLD)));
+  // console.warn('scale computed', this.scale);
+  var ratio = 1 / Math.sqrt(width * height / PIXEL_THRESHOLD);
+  ratio = ratio > 1 ? 1 : ratio;
+  this.scale = Math.round(ratio * 10) / 10;
+  console.warn('scale computed', this.scale);
+};
+
+/**
+ * Normalizes the raw scale to avoid rounding issues.
+ * Note: take from http://jsfiddle.net/gamealchemist/r6aVp.
+ * @param {number} s Raw scale.
+ * @returns {number} Normalized scale.
+ * @static
+ */
+Scale.normalizeScale = function (s) {
+  if (s > 1) {
+    throw 's must be <1';
+  }
+  s = 0 | 1 / s;
+  var l = this.log2(s);
+  var mask = 1 << l;
+  var accuracy = 4;
+  while (accuracy && l) {
+    l--;
+    mask |= 1 << l;
+    accuracy--;
+  }
+
+  return 1 / (s & mask);
+};
+
+/**
+ * Finds the log base 2 of an N-bit integer.
+ * Note: taken from http://graphics.stanford.edu/~seander/bithacks.html.
+ * @param v N-bit number.
+ * @returns {number} Log base 2 of the number.
+ * @static
+ */
+Scale.log2 = function (v) {
+  var b = [0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000];
+  var S = [1, 2, 4, 8, 16];
+  var i = 0,
+      r = 0;
+
+  for (i = 4; i >= 0; i--) {
+    if (v & b[i]) {
+      v >>= S[i];
+      r |= S[i];
+    }
+  }
+  return r;
+};
+
+module.exports = Scale;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -2483,7 +2576,7 @@ ObjectTracker.prototype.setStepSize = function (stepSize) {
 module.exports = ObjectTracker;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2498,6 +2591,7 @@ module.exports = ObjectTracker;
 var TrackingMath = __webpack_require__(1).TrackingMath;
 var DisjointSet = __webpack_require__(0).DisjointSet;
 var Image = __webpack_require__(0).Image;
+var Scale = __webpack_require__(0).Scale;
 
 var _require = __webpack_require__(4),
     eye = _require.eye,
@@ -2553,6 +2647,7 @@ ViolaJones.classifiers = {
  * @static
  */
 ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, stepSize, edgesDensity, data) {
+  var now = +new Date();
   var total = 0;
   var rects = [];
   var integralImage = new Int32Array(width * height);
@@ -2598,6 +2693,8 @@ ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, 
     blockWidth = scale * minWidth | 0;
     blockHeight = scale * minHeight | 0;
   }
+  var then = +new Date();
+  console.warn('detect time', then - now);
   return this.mergeRectangles_(rects);
 };
 
@@ -2771,14 +2868,15 @@ ViolaJones.mergeRectangles_ = function (rects) {
   }
 
   var result = [];
+  var scale = Scale.scale;
   Object.keys(map).forEach(function (key) {
     var rect = map[key];
     result.push({
       total: rect.total,
-      width: rect.width / rect.total + 0.5 | 0,
-      height: rect.height / rect.total + 0.5 | 0,
-      x: rect.x / rect.total + 0.5 | 0,
-      y: rect.y / rect.total + 0.5 | 0
+      width: (rect.width / rect.total + 0.5) / scale | 0,
+      height: (rect.height / rect.total + 0.5) / scale | 0,
+      x: (rect.x / rect.total + 0.5) / scale | 0,
+      y: (rect.y / rect.total + 0.5) / scale | 0
     });
   });
 
@@ -2789,7 +2887,7 @@ ViolaJones.mergeRectangles_ = function (rects) {
 module.exports = ViolaJones;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2801,7 +2899,7 @@ var eye = new Float64Array([20, 20, -1.4562760591506958, 6, 0, 2, 0, 8, 20, 12, 
 module.exports = eye;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2813,7 +2911,7 @@ var face = new Float64Array([20, 20, 0.822689414024353, 3, 0, 2, 3, 7, 14, 4, -1
 module.exports = face;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2825,7 +2923,7 @@ var mouth = new Float64Array([25, 15, -1.4372119903564453, 13, 0, 2, 0, 0, 14, 9
 module.exports = mouth;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

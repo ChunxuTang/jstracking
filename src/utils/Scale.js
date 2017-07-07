@@ -20,9 +20,13 @@ Scale.scale = 1.0;
  * @static
  */
 Scale.adjustScale = function (width, height) {
-  const PIXEL_THRESHOLD = 76800; // 320 * 240
-  this.scale =
-    this.normalizeScale(1 / (Math.sqrt(width * height / PIXEL_THRESHOLD)));
+  const PIXEL_THRESHOLD = 50000;
+  // this.scale =
+  //   this.normalizeScale(1.0 / (Math.sqrt(width * height / PIXEL_THRESHOLD)));
+  // console.warn('scale computed', this.scale);
+  let ratio = 1 / (Math.sqrt(width * height / PIXEL_THRESHOLD));
+  ratio = ratio > 1 ? 1 : ratio;
+  this.scale = Math.round(ratio * 10) / 10;
   console.warn('scale computed', this.scale);
 };
 

@@ -266,10 +266,8 @@ tracking.trackVideo_ = function(element, tracker, opt_options) {
     if (opt_options.scaled) {
       tracking.Scale.adjustScale(element.offsetWidth, element.offsetHeight);
     }
-    canvas.width = width = element.offsetWidth;
-    canvas.height = height = element.offsetHeight;
-    // canvas.width = width;
-    // canvas.height = height;
+    canvas.width = width = element.offsetWidth * tracking.Scale.scale;
+    canvas.height = height = element.offsetHeight * tracking.Scale.scale;
   };
   resizeCanvas_();
   element.addEventListener('resize', resizeCanvas_);

@@ -1,2 +1,1 @@
-module.exports = require('./src/tracking.js');
-
+module.exports = require('./src/tracking');

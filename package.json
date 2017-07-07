@@ -2,9 +2,14 @@
   "name": "jstracking",
   "version": "0.0.1",
   "description": "An NPM compatible modern approach for Computer Vision on the web",
+  "keywords": [
+    "tracking",
+    "trackingjs",
+    "jstracking",
+    "webrtc"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "jshint",
     "validate": "npm ls"
   },
