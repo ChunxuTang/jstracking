@@ -1,4 +1,3 @@
-//import TrackingMath from '../math/Math';
 const TrackingMath = require('../math').TrackingMath;
 
 /**
@@ -200,5 +199,4 @@ Brief.getRandomOffsets_ = function(width) {
   return this.randomImageOffsets_[width];
 };
 
-// export default Brief;
 module.exports = Brief;

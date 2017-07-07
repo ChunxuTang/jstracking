@@ -56,5 +56,4 @@ DisjointSet.prototype.union = function(i, j) {
   this.parent[iRepresentative] = jRepresentative;
 };
 
-// export default DisjointSet;
 module.exports = DisjointSet;

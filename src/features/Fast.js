@@ -247,5 +247,4 @@ Fast.getCircleOffsets_ = function(width) {
   return circle;
 };
 
-// export default Fast;
 module.exports = Fast;

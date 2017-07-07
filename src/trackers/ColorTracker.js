@@ -1,5 +1,3 @@
-// import Tracker from './Tracker';
-// import { TrackingMath } from '../math';
 const Tracker = require('./Tracker');
 const TrackingMath = require('../math').TrackingMath;
 
@@ -426,5 +424,4 @@ ColorTracker.registerColor('yellow', function(r, g, b) {
 let neighboursI = new Int32Array([-1, -1, 0, 1, 1, 1, 0, -1]);
 let neighboursJ = new Int32Array([0, 1, 1, 1, 0, -1, -1, -1]);
 
-// export default ColorTracker;
 module.exports = ColorTracker;

@@ -320,5 +320,4 @@ if (!navigator.getUserMedia) {
     navigator.mozGetUserMedia || navigator.msGetUserMedia;
 }
 
-//export default window.tracking;
 module.exports = window.tracking;

@@ -1,4 +1,3 @@
-// import { EventEmitter } from '../utils';
 const EventEmitter = require('../utils').EventEmitter;
 
 class TrackerTask extends EventEmitter {
@@ -96,5 +95,4 @@ TrackerTask.prototype.stop = function() {
   return this;
 };
 
-// export default TrackerTask;
 module.exports = TrackerTask;

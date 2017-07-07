@@ -1,9 +1,3 @@
-// import TrackingMath from '../math/Math';
-// import DisjointSet from '../utils/DisjointSet';
-// import Image from '../utils/Image';
-
-// import { eye, face, mouth } from './haar';
-
 const TrackingMath = require('../math').TrackingMath;
 const DisjointSet = require('../utils').DisjointSet;
 const Image = require('../utils').Image;
@@ -82,7 +76,6 @@ ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, 
     let step = (scale * stepSize + 0.5) | 0;
     for (let i = 0; i < (height - blockHeight); i += step) {
       for (let j = 0; j < (width - blockWidth); j += step) {
-
         if (edgesDensity > 0) {
           if (this.isTriviallyExcluded(edgesDensity, integralImageSobel, i, j, width, blockWidth, blockHeight)) {
             continue;
@@ -301,5 +294,4 @@ ViolaJones.mergeRectangles_ = function (rects) {
   return result;
 };
 
-// export default ViolaJones;
 module.exports = ViolaJones;

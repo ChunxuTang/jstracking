@@ -145,5 +145,4 @@ EventEmitter.prototype.setMaxListeners = function() {
   throw new Error('Not implemented');
 };
 
-// export default EventEmitter;
 module.exports = EventEmitter;

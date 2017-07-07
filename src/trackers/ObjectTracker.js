@@ -1,5 +1,3 @@
-// import Tracker from './Tracker';
-// import { ViolaJones } from '../training';
 const Tracker = require('./Tracker');
 const ViolaJones = require('../training').ViolaJones;
 
@@ -172,5 +170,4 @@ ObjectTracker.prototype.setStepSize = function(stepSize) {
   this.stepSize = stepSize;
 };
 
-// export default ObjectTracker;
 module.exports = ObjectTracker;

@@ -34,5 +34,4 @@ Canvas.loadImage = function(canvas, src, x, y, width, height, opt_callback) {
   img.src = src;
 };
 
-// export default Canvas;
 module.exports = Canvas;

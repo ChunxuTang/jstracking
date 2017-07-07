@@ -321,5 +321,4 @@ Image.sobel = function(pixels, width, height) {
   return output;
 };
 
-// export default Image;
 module.exports = Image;

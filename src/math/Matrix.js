@@ -30,5 +30,4 @@ Matrix.forEach = function(pixels, width, height, fn, opt_jump) {
   }
 };
 
-// export default Matrix;
 module.exports = Matrix;
