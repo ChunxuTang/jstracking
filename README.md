@@ -29,7 +29,7 @@ The tracking.js library APIs are all kept, so you can refer to
 
 - [ ] Written in CommonJS modules.
 - [ ] Auto-scaling option to boost performance, especially for large videos/images.
-- [ ] FPS options to set detection counts in one second.
+- [ ] FPS option to set tracking count in one second.
 
 ## License
 
