@@ -469,7 +469,6 @@ tracking.trackVideo_ = function (element, tracker, opt_options) {
   var interval = 1000 / fps;
 
   var resizeCanvas_ = function resizeCanvas_() {
-    console.warn('resizeCanvas_');
     if (opt_options.scaled) {
       tracking.Scale.adjustScale(element.offsetWidth, element.offsetHeight);
     }
@@ -2263,7 +2262,6 @@ Scale.adjustScale = function (width, height) {
   var PIXEL_THRESHOLD = 50000;
   var ratio = 1 / Math.sqrt(width * height / PIXEL_THRESHOLD);
   this.scale = this.normalizeScale(ratio);
-  console.warn('scale computed', this.scale);
 };
 
 /**
@@ -2563,7 +2561,6 @@ ViolaJones.classifiers = {
  * @static
  */
 ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, stepSize, edgesDensity, data) {
-  var now = +new Date();
   var total = 0;
   var rects = [];
   var integralImage = new Int32Array(width * height);
@@ -2608,8 +2605,7 @@ ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, 
     blockWidth = scale * minWidth | 0;
     blockHeight = scale * minHeight | 0;
   }
-  var then = +new Date();
-  console.warn('detect time', then - now);
+
   return this.mergeRectangles_(rects);
 };
 

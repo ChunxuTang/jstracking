@@ -262,7 +262,6 @@ tracking.trackVideo_ = function(element, tracker, opt_options) {
   const interval = 1000 / fps;
 
   const resizeCanvas_ = function() {
-    console.warn('resizeCanvas_');
     if (opt_options.scaled) {
       tracking.Scale.adjustScale(element.offsetWidth, element.offsetHeight);
     }

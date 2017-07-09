@@ -51,7 +51,6 @@ ViolaJones.classifiers = {
  * @static
  */
 ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, stepSize, edgesDensity, data) {
-  let now = +new Date();
   let total = 0;
   let rects = [];
   let integralImage = new Int32Array(width * height);
@@ -98,8 +97,7 @@ ViolaJones.detect = function (pixels, width, height, initialScale, scaleFactor, 
     blockWidth = (scale * minWidth) | 0;
     blockHeight = (scale * minHeight) | 0;
   }
-  let then = +new Date();
-  console.warn('detect time', then - now);
+
   return this.mergeRectangles_(rects);
 };
 

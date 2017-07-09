@@ -23,7 +23,6 @@ Scale.adjustScale = function (width, height) {
   const PIXEL_THRESHOLD = 50000;
   let ratio = 1 / (Math.sqrt(width * height / PIXEL_THRESHOLD));
   this.scale = this.normalizeScale(ratio);
-  console.warn('scale computed', this.scale);
 };
 
 /**
