@@ -20,9 +20,37 @@ Install via [npm](https://www.npmjs.com/), or [download as a zip](https://github
 npm install jstracking
 ```
 
+## Usage
+
+If `tracking(-min).js` is embedded in HTML, the usage of jstracking is the same
+as that of tracking.js.
+
+For ES6 or CommonJS modules, an example of usage is shown below.
+
+```javascript
+import tracking from 'jstracking';  // ES6
+// Or
+// const tracking = require('jstracking');  // CommonJS
+
+const tracker = new tracking.ObjectTracker('face');
+tracker.setInitialScale(4);
+tracker.setStepSize(2);
+tracker.setEdgesDensity(0.1);
+
+tracking.track('#video', tracker, {
+    camera: true,
+    fps: 10,
+    scaled: true
+});
+
+tracker.on('track', event => {
+    // handle event...
+});
+```
+
 ## APIs
 
-The tracking.js library APIs are all kept, so you can refer to
+The tracking.js library APIs are all kept, so you can refer to documentation of
 [tracking.js](https://trackingjs.com/) for details.
 
 ## New Features
