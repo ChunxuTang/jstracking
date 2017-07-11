@@ -1,1 +1,1 @@
-module.exports = require('./build/tracking');
+module.exports = require('./src/tracking');
