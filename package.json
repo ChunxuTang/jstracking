@@ -1,6 +1,6 @@
 {
   "name": "jstracking",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An npm compatible modern approach for Computer Vision on the web",
   "keywords": [
     "tracking",
